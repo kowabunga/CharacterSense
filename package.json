@@ -1,0 +1,32 @@
+{
+  "name": "charactersense",
+  "version": "1.0.0",
+  "description": "World of Warcraft character info site",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kowabunga/CharacterSense.git"
+  },
+  "author": "Anthony Siletti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kowabunga/CharacterSense/issues"
+  },
+  "homepage": "https://github.com/kowabunga/CharacterSense#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "mongoose": "^5.10.0",
+    "passport": "^0.4.1",
+    "passport-bnet": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
