@@ -1,6 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv').config({ path: './config/config.env' });
 const connectDb = require('./config/db');
+const passport = require('passport');
+
+require('./config/passport')(passport);
 
 //Connect db
 connectDb();
@@ -8,6 +11,9 @@ connectDb();
 const app = express();
 
 app.use(express.json({ extended: false }));
+
+//Initialize passport - allows for use of oauth
+app.use(passport.initialize());
 
 app.use('/auth', require('./api/routes/auth'));
 
