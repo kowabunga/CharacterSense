@@ -5,10 +5,19 @@ const Dashboard = ({ match }) => {
   useEffect(() => {
     // Check if token in local storage and if token is in local storage it matches token in url. If both are false, set token
     if (
-      localStorage.getItem('token') !== null &&
-      localStorage.getItem('token', match.params.token) !== match.params.token
+      localStorage.getItem('token') === null ||
+      localStorage.getItem('token') !== `Bearer ${match.params.token}`
     ) {
-      localStorage.setItem('token', match.params.token);
+      localStorage.setItem('token', `Bearer ${match.params.token}`);
+    }
+
+    const token = localStorage.getItem('token');
+
+    //Set defaults for axios header calls
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = token;
+    } else {
+      delete axios.defaults.headers.common['Authorization'];
     }
   }, []);
 
@@ -16,11 +25,8 @@ const Dashboard = ({ match }) => {
     try {
       const url =
         'https://us.api.blizzard.com/data/wow/journal-instance/758?namespace=static-us';
-      const data = await axios.get(url, {
-        // headers: { Authorization: `Bearer ${''}` },
-      });
-      const resData = data.json();
-      console.log(resData);
+      const res = await axios.get(url);
+      console.log(res.data);
     } catch (error) {
       console.error(error);
     }

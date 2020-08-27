@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import WowState from './context/wow/WowState';
+import HomePage from './components/pages/HomePage';
 import Dashboard from './components/pages/Dashboard';
 import './App.css';
 
@@ -13,6 +14,7 @@ function App() {
         </a>
         <Switch>
           //@TODO change this path
+          <Route exact path='/' component={HomePage} />
           <Route exact path='/dashboard/:token' component={Dashboard} />
         </Switch>
       </Router>

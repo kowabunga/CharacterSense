@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv').config({ path: './config/config.env' });
 const connectDb = require('./config/db');
 const passport = require('passport');
+const cors = require('cors');
 
 require('./config/passport')(passport);
 
@@ -9,6 +10,7 @@ require('./config/passport')(passport);
 connectDb();
 
 const app = express();
+app.use(cors());
 
 app.use(express.json({ extended: false }));
 
