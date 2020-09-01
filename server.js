@@ -18,6 +18,7 @@ app.use(express.json({ extended: false }));
 app.use(passport.initialize());
 
 app.use('/auth', require('./api/routes/auth'));
+app.use('/user', require('./api/routes/user'));
 
 const PORT = process.env.PORT || 3500;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
