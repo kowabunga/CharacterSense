@@ -67,7 +67,37 @@ exports.editPassword = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-       
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(400).json({ msg: 'No user with that email' });
+    }
+
+    const passMatch = await bcrypt.compare(password, user.password);
+
+    if (!passMatch) {
+      return res.status(401).json({ msg: 'Invalid Credentials' });
+    }
+
+    const payload = {
+      user: {
+        id: user._id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.SECRET,
+      {
+        expiresIn: Date.now() + '7d',
+      },
+      (err, token) => {
+        if (err) throw new Error(err);
+
+        res.status(201).json({ msg: 'Logged in', token });
+      }
+    );
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

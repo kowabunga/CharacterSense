@@ -46,6 +46,6 @@ router.put(
   editPassword
 );
 
-router.get('/login',login)
+router.get('/login', login);
 
 module.exports = router;
