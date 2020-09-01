@@ -11,7 +11,7 @@ router.get('/bnet', passport.authenticate('bnet'));
 router.get(
   '/bnet/callback',
   passport.authenticate('bnet', {
-    failureRedirect: '/',
+    failureRedirect: 'http://localhost:3000/',
   }),
   (req, res) => {
     res.redirect(`http://localhost:3000/dashboard/${req.user.token}`);
@@ -20,10 +20,7 @@ router.get(
 
 router.get('/logout', (req, res) => {
   req.logout();
-  res.redirect('/');
+  res.redirect('http://localhost:3000/');
 });
-
-// @route   GET /auth/bnet
-// @desc    Authenticate with bnet
 
 module.exports = router;

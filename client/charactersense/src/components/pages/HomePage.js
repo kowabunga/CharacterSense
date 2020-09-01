@@ -1,12 +1,47 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import WowContext from '../../context/wow/wowContext';
-import { Redirect } from 'react-router-dom';
 
 const HomePage = () => {
   const wowContext = useContext(WowContext);
-  const { login } = wowContext;
+  const { loggedIn, checkIfLoggedIn } = wowContext;
+  const token =
+    localStorage.getItem('token') !== null ? localStorage.getItem('token') : '';
+  useEffect(() => {
+    checkIfLoggedIn();
+  }, []);
 
-  return <div></div>;
+  return (
+    <div className='jumbotron text-center'>
+      <h1 className='display-4'>Welcome to CharacterSense</h1>
+      <p className='lead mt-3'>
+        The one and only place where all the information you need for your daily
+        World of Warcraft journey is located.
+      </p>
+
+      {!loggedIn && (
+        <p className='mt-5'>
+          Ready for all the information you'll ever need to play World of
+          Warcraft? Log in with your BattleNet account today!
+          <br />
+          <a
+            href='http://localhost:5000/auth/bnet'
+            className='btn btn-outline-primary my-2'
+          >
+            Login
+          </a>
+        </p>
+      )}
+      {loggedIn && (
+        <p>
+          Already logged in? Go to{' '}
+          <Link to={`/dashboard/${token.slice(7, token.length)}`}>
+            Dashboard
+          </Link>
+        </p>
+      )}
+    </div>
+  );
 };
 
 export default HomePage;

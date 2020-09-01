@@ -1,24 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import WowContext from '../../context/wow/wowContext';
 import axios from 'axios';
 
 const Dashboard = ({ match }) => {
+  const wowContext = useContext(WowContext);
+  const { checkIfLoggedIn } = wowContext;
+
   useEffect(() => {
-    // Check if token in local storage and if token is in local storage it matches token in url. If both are false, set token
-    if (
-      localStorage.getItem('token') === null ||
-      localStorage.getItem('token') !== `Bearer ${match.params.token}`
-    ) {
-      localStorage.setItem('token', `Bearer ${match.params.token}`);
-    }
-
-    const token = localStorage.getItem('token');
-
-    //Set defaults for axios header calls
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = token;
-    } else {
-      delete axios.defaults.headers.common['Authorization'];
-    }
+    checkIfLoggedIn(match);
   }, []);
 
   const test1 = async () => {
