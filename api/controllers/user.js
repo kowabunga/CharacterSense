@@ -2,6 +2,13 @@ const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
+const router = require('../routes/user');
+
+const hashPassword = async ptPassword => {
+  const salt = await bcrypt.genSalt();
+  const passHash = await bcrypt.hash(ptPassword, salt);
+  return passHash;
+};
 
 exports.register = async (req, res) => {
   try {
@@ -20,12 +27,8 @@ exports.register = async (req, res) => {
     user = new User({
       name,
       email,
-      password,
+      password: await hashPassword(password),
     });
-
-    const salt = await bcrypt.genSalt(); //defaults to 10 rounds
-    const passHash = await bcrypt.hash(password, salt);
-    user.password = passHash;
 
     await user.save();
 
@@ -40,6 +43,31 @@ exports.register = async (req, res) => {
 
       res.status(201).json({ msg: 'User created', token });
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+exports.editPassword = async (req, res) => {
+  console.log(req.user);
+  try {
+    const { password } = req.body;
+
+    await User.findByIdAndUpdate(req.user.id, {
+      password: await hashPassword(password),
+    });
+
+    res.status(200).json({ msg: 'Password updated' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+       
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
