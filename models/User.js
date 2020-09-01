@@ -16,6 +16,15 @@ const UserSchema = new Schema({
     required: true,
     minlength: 6,
   },
+  isAuthorized: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  authorizeToken: {
+    type: String,
+    default: null,
+  },
   registeredOn: {
     type: Date,
     default: Date.now,
