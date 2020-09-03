@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
 import WowContext from './wowContext';
 import WowReducer from './wowReducer';
-import { SET_LOGIN } from './types';
+import { SET_LOGIN, SET_USER } from './types';
 
 import axios from 'axios';
 
-const WowState = props => {
+const WoWState = props => {
   const initialState = {
     loggedIn: false,
     user: {},
@@ -37,22 +37,27 @@ const WowState = props => {
     }
   };
 
+  const getUser = async loginStatus => {
+    return await axios.get('/user', {
+      headers: {
+        'x-auth-token': loginStatus.token,
+      },
+    });
+  };
+
   const login = async (email, password) => {
     try {
-      const lgs = await axios.post('/user/login', {
+      const loginTry = await axios.post('/user/login', {
         email,
         password,
       });
 
-      const loginStatus = lgs.data;
+      const loginStatus = loginTry.data;
 
-      console.log(loginStatus);
+      const userData = await getUser(loginStatus);
 
-      if (loginStatus.type === 'LOGIN_SUCCESS') {
-        console.log('login success', loginStatus.msg);
-      } else if (loginStatus.type === 'INVALID_CREDENTIALS') {
-        console.log('invalid credentials', loginStatus.msg);
-      }
+      dispatch({ type: SET_USER, payload: userData });
+      return loginStatus;
     } catch (error) {
       console.error(error);
     }
@@ -69,4 +74,4 @@ const WowState = props => {
   );
 };
 
-export default WowState;
+export default WoWState;

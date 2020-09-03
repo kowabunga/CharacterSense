@@ -1,17 +1,32 @@
 import React, { useState, useContext } from 'react';
-import WowContext from '../../context/wow/wowContext';
+import { useHistory } from 'react-router-dom';
+import WowContext from '../../../context/wow/wowContext';
 
 const Login = () => {
+  const history = useHistory();
+
   const wowContext = useContext(WowContext);
   const { login } = wowContext;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  //Gathers login data from state and submits to backend for login
+  //Gathers login data from state and submits to backend for login on form submit
   const onLogin = async e => {
     e.preventDefault();
-    await login(email, password);
+    try {
+      //Only calls login function from server if email and password are not empty
+      if (email !== '' && password !== '') {
+        const loginStatus = await login(email, password);
+
+        //Should check if loginstatus type is LOGIN_SUCCESS, if so redirect.
+        //This does run, but does not redirect. why?
+        loginStatus.type === 'LOGIN_SUCCESS' &&
+          history.push(`/login/authorize`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

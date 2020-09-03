@@ -27,12 +27,7 @@ const HomePage = () => {
           Ready for all the information you'll ever need to play World of
           Warcraft? Log in with your BattleNet account today!
           <br />
-          <a
-            href='http://localhost:5000/auth/bnet'
-            className='btn btn-outline-primary my-2'
-          >
-            Login
-          </a>
+          
         </p>
       )}
       {loggedIn && (

@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 
-const hashPassword = async ptPassword => {
+const hashItem = async ptPassword => {
   const salt = await bcrypt.genSalt();
   const passHash = await bcrypt.hash(ptPassword, salt);
   return passHash;
@@ -28,7 +28,7 @@ exports.register = async (req, res) => {
     user = new User({
       name,
       email,
-      password: await hashPassword(password),
+      password: await hashItem(password),
     });
 
     await user.save();
@@ -90,7 +90,7 @@ exports.login = async (req, res) => {
 
         res
           .status(201)
-          .json({ TYPE: 'LOGIN_SUCCESS', msg: 'Logged in', token });
+          .json({ type: 'LOGIN_SUCCESS', msg: 'Logged in', token });
       }
     );
   } catch (error) {
@@ -105,7 +105,7 @@ exports.editPassword = async (req, res) => {
     const { password } = req.body;
 
     await User.findByIdAndUpdate(req.user.id, {
-      password: await hashPassword(password),
+      password: await hashItem(password),
     });
 
     res
@@ -114,5 +114,46 @@ exports.editPassword = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
+  }
+};
+
+exports.getUser = async (req, res) => {
+  console.log(req.user);
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(400).json({ msg: 'No user by this id' });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+};
+
+exports.addToken = async (req, res) => {
+  try {
+    console.log(req.body.mahdfsj);
+    const { oauthtoken } = req.body;
+
+    if (oauthtoken) {
+      const hashToken = await hashItem(oauthtoken);
+      let user = await User.findByIdAndUpdate(
+        req.user.id,
+        {
+          authorizationToken: hashToken,
+          isAuthorized: hashToken !== null,
+        },
+        { new: true } //want to return updated user
+      );
+
+      res.status(200).json({ type: 'AUTHORIZE_SUCCESS', user: user });
+    } else {
+      res.redirect('http://localhost:3000/');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
   }
 };

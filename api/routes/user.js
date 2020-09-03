@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { register, editPassword, login } = require('../controllers/user');
+const {
+  register,
+  editPassword,
+  login,
+  getUser,
+  addToken,
+} = require('../controllers/user');
 const { check } = require('express-validator');
 const auth = require('../../middleware/auth');
 
@@ -46,6 +52,19 @@ router.put(
   editPassword
 );
 
+// @route   GET /user/:jwt/add
+// @desc    Add oauth token to user acc
+// @access  Private - Auth required
+router.put('/:jwt/add', auth, addToken);
+
+// @route   GET /user/:jwt
+// @desc    Register user
+// @access  Private - Auth required
+router.get('/', auth, getUser);
+
+// @route   GET /user/login
+// @desc    Login user
+// @access  Public
 router.post('/login', login);
 
 module.exports = router;
