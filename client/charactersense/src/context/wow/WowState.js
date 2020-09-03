@@ -8,10 +8,10 @@ import axios from 'axios';
 const WowState = props => {
   const initialState = {
     loggedIn: false,
+    user: {},
   };
 
   const [state, dispatch] = useReducer(WowReducer, initialState);
-  const { loggedIn } = state;
 
   const setLoginStatus = isLoggedIn => {
     dispatch({ type: SET_LOGIN, payload: isLoggedIn });
@@ -20,12 +20,12 @@ const WowState = props => {
   const checkIfLoggedIn = match => {
     // Check if token in local storage and if token is in local storage it matches token in url. If both are false, set token
     if (match) {
-      if (localStorage.getItem('token') === null) {
-        localStorage.setItem('token', `Bearer ${match.params.token}`);
+      if (localStorage.getItem('bnetjwtoken') === null) {
+        localStorage.setItem('bnetjwtoken', `Bearer ${match.params.token}`);
       }
     }
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('bnetjwtoken');
     if (token) {
       setLoginStatus(true);
     }
@@ -37,8 +37,33 @@ const WowState = props => {
     }
   };
 
+  const login = async (email, password) => {
+    try {
+      const lgs = await axios.post('/user/login', {
+        email,
+        password,
+      });
+
+      const loginStatus = lgs.data;
+
+      console.log(loginStatus);
+
+      if (loginStatus.type === 'LOGIN_SUCCESS') {
+        console.log('login success', loginStatus.msg);
+      } else if (loginStatus.type === 'INVALID_CREDENTIALS') {
+        console.log('invalid credentials', loginStatus.msg);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const { user, loggedIn } = state;
+
   return (
-    <WowContext.Provider value={{ loggedIn, checkIfLoggedIn, setLoginStatus }}>
+    <WowContext.Provider
+      value={{ user, loggedIn, login, checkIfLoggedIn, setLoginStatus }}
+    >
       {props.children}
     </WowContext.Provider>
   );

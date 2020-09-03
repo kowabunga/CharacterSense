@@ -23,13 +23,13 @@ const Header = () => {
         <ul className='navbar-nav ml-auto'>
           <li className='nav-item'>
             {!loggedIn && (
-              <a
-                href='http://localhost:5000/auth/bnet'
+              <Link
+                to='/login'
+                // href='http://localhost:5000/auth/bnet'
                 className='nav-link'
-                onClick={() => setLoginStatus(true)}
               >
                 Login
-              </a>
+              </Link>
             )}
           </li>
 
@@ -39,7 +39,7 @@ const Header = () => {
                 href='http://localhost:5000/auth/logout'
                 className='nav-link'
                 onClick={() => {
-                  setLoginStatus(true);
+                  setLoginStatus(false);
                   removeToken();
                 }}
               >

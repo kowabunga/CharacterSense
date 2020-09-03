@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "concurrently \"nodemon server.js\" "
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "passport-bnet": "^2.0.0"
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "nodemon": "^2.0.4"
   }
 }

@@ -2,7 +2,6 @@ const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
-const router = require('../routes/user');
 
 const hashPassword = async ptPassword => {
   const salt = await bcrypt.genSalt();
@@ -17,11 +16,13 @@ exports.register = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password } = req.body;
     let user = await User.findOne({ email: email });
 
     if (user) {
-      return res.status(400).json({ msg: 'Email already in use' });
+      return res
+        .status(400)
+        .json({ type: 'EMAIL_IN_USE', msg: 'Email already in use' });
     }
 
     user = new User({
@@ -41,24 +42,10 @@ exports.register = async (req, res) => {
     jwt.sign(payload, process.env.SECRET, (err, token) => {
       if (err) throw new Error(err);
 
-      res.status(201).json({ msg: 'User created', token });
+      res
+        .status(201)
+        .json({ type: 'USER_CREATED', msg: 'User created', token });
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-};
-
-exports.editPassword = async (req, res) => {
-  console.log(req.user);
-  try {
-    const { password } = req.body;
-
-    await User.findByIdAndUpdate(req.user.id, {
-      password: await hashPassword(password),
-    });
-
-    res.status(200).json({ msg: 'Password updated' });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -71,13 +58,19 @@ exports.login = async (req, res) => {
 
     const user = await User.findOne({ email: email });
     if (!user) {
-      return res.status(400).json({ msg: 'No user with that email' });
+      return res.status(400).json({
+        type: 'INVALID_CREDENTIALS',
+        msg: 'No registered user with that email',
+      });
     }
 
     const passMatch = await bcrypt.compare(password, user.password);
 
     if (!passMatch) {
-      return res.status(401).json({ msg: 'Invalid Credentials' });
+      return res.status(401).json({
+        type: 'INVALID_CREDENTIALS',
+        msg: 'Username or password incorrect',
+      });
     }
 
     const payload = {
@@ -95,9 +88,29 @@ exports.login = async (req, res) => {
       (err, token) => {
         if (err) throw new Error(err);
 
-        res.status(201).json({ msg: 'Logged in', token });
+        res
+          .status(201)
+          .json({ TYPE: 'LOGIN_SUCCESS', msg: 'Logged in', token });
       }
     );
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+exports.editPassword = async (req, res) => {
+  console.log(req.user);
+  try {
+    const { password } = req.body;
+
+    await User.findByIdAndUpdate(req.user.id, {
+      password: await hashPassword(password),
+    });
+
+    res
+      .status(200)
+      .json({ type: 'PASSWORD_UPDATE_SUCCESS', msg: 'Password updated' });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

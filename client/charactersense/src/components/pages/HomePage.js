@@ -6,7 +6,10 @@ const HomePage = () => {
   const wowContext = useContext(WowContext);
   const { loggedIn, checkIfLoggedIn } = wowContext;
   const token =
-    localStorage.getItem('token') !== null ? localStorage.getItem('token') : '';
+    localStorage.getItem('token') !== null
+      ? localStorage.getItem('bnetjwtoken')
+      : '';
+
   useEffect(() => {
     checkIfLoggedIn();
   }, []);

@@ -21,7 +21,7 @@ const UserSchema = new Schema({
     required: true,
     default: false,
   },
-  authorizeToken: {
+  authorizationToken: {
     type: String,
     default: null,
   },
