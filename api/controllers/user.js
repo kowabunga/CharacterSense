@@ -100,7 +100,6 @@ exports.login = async (req, res) => {
 };
 
 exports.editPassword = async (req, res) => {
-  console.log(req.user);
   try {
     const { password } = req.body;
 
@@ -118,7 +117,6 @@ exports.editPassword = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-  console.log(req.user);
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) {

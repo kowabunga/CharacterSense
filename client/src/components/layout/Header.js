@@ -23,26 +23,15 @@ const Header = () => {
         <ul className='navbar-nav ml-auto'>
           <li className='nav-item'>
             {!loggedIn && (
-              <Link
-                to='/login'
-                // href='http://localhost:5000/auth/bnet'
-                className='nav-link'
-              >
+              <a href='http://localhost:5000/auth/bnet' className='nav-link'>
                 Login
-              </Link>
+              </a>
             )}
           </li>
 
           <li className='nav-item'>
-            {loggedIn && (
-              <a
-                href='http://localhost:5000/auth/logout'
-                className='nav-link'
-                onClick={() => {
-                  setLoginStatus(false);
-                  removeToken();
-                }}
-              >
+            {!loggedIn && (
+              <a href='http://localhost:5000/auth/logout' className='nav-link'>
                 Logout
               </a>
             )}
