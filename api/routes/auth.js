@@ -4,21 +4,23 @@ const passport = require('passport');
 
 // @route   GET /auth/bnet
 // @desc    Authenticate with bnet
-router.get('/auth/bnet', passport.authenticate('bnet'));
+router.get('/bnet', passport.authenticate('bnet'));
 
 // @route   GET /auth/bnet
 // @desc    Authenticate with bnet
 router.get(
-  '/auth/bnet/callback',
+  '/bnet/callback',
   passport.authenticate('bnet', {
-    failureRedirect: 'http://localhost:3000/dashboard/login',
+    failureRedirect: 'http://localhost:3000/',
   }),
   (req, res) => {
-    res.redirect('http://localhost:3000/dashboard');
+    res.redirect(`http://localhost:3000/dashboard/${req.user.token}`);
   }
 );
 
-// @route   GET /auth/bnet
-// @desc    Authenticate with bnet
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('http://localhost:3000/');
+});
 
 module.exports = router;

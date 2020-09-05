@@ -10,7 +10,7 @@ module.exports = connectDb = async () => {
     });
     console.log(`MongoDb connected on ${connection.connection.host}`);
   } catch (error) {
-    console.error(object);
+    console.error(error);
     process.exit(1);
   }
 };

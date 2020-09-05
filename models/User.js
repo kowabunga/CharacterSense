@@ -2,26 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  email: {
+  bnetId: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
+  battleTag: {
     type: String,
     required: true,
-  },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 6,
-  },
-  registeredOn: {
-    type: Date,
-    default: Date.now,
   },
 });
 
