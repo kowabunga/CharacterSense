@@ -1,4 +1,8 @@
-import { SET_ACCESS_TOKEN_INFO } from './types';
+import {
+  SET_ACCESS_TOKEN_INFO,
+  SET_WOW_TOKEN,
+  SET_MYTHIC_PLUS_AFFIXES,
+} from './types';
 
 export default (state, action) => {
   const { type, payload } = action;
@@ -7,6 +11,11 @@ export default (state, action) => {
       return {
         ...state,
         tokenInfo: payload,
+      };
+    case SET_WOW_TOKEN:
+      return {
+        ...state,
+        wowTokenPrice: payload,
       };
     default:
       return state;
