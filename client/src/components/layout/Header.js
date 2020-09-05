@@ -4,10 +4,7 @@ import WowContext from '../../context/wow/wowContext';
 
 const Header = () => {
   const wowContext = useContext(WowContext);
-  const { loggedIn, setLoginStatus } = wowContext;
-
-  const removeToken = () =>
-    localStorage.getItem('token') && localStorage.removeItem('token');
+  const { loggedIn } = wowContext;
 
   return (
     <nav className='navbar bg-light navbar-light navbar-expand-sm'>

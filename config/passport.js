@@ -38,6 +38,6 @@ module.exports = passport => {
   });
 
   passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => done(err, user));
+    User.findOne({ bnetId: id }, (err, user) => done(err, user));
   });
 };

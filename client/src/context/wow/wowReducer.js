@@ -1,12 +1,13 @@
-import { SET_LOGIN, SET_USER } from './types';
+import { SET_ACCESS_TOKEN_INFO } from './types';
 
 export default (state, action) => {
   const { type, payload } = action;
   switch (type) {
-    case SET_LOGIN:
-      return { ...state, loggedIn: payload };
-    case SET_USER:
-      return { ...state, user: payload };
+    case SET_ACCESS_TOKEN_INFO:
+      return {
+        ...state,
+        tokenInfo: payload,
+      };
     default:
       return state;
   }

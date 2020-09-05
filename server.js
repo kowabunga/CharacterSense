@@ -4,6 +4,7 @@ const connectDb = require('./config/db');
 const passport = require('passport');
 const cors = require('cors');
 const bnetPassport = require('./config/passport');
+const cookieSession = require('cookie-session');
 
 //Initialize bnet passport strategy
 bnetPassport(passport);
@@ -16,11 +17,20 @@ app.use(cors());
 
 app.use(express.json({ extended: false }));
 
+app.use(
+  cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [process.env.COOKIE_SESSION_KEY],
+  })
+);
+
 //Initialize passport - allows for use of oauth
 app.use(passport.initialize());
 
+//use passport session
+app.use(passport.session());
+
 app.use('/auth', require('./api/routes/auth'));
-app.use('/user', require('./api/routes/user'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
