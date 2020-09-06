@@ -13,7 +13,9 @@ const HomePage = () => {
 
   //first useEffect calls function to get auth token information and store in state
   useEffect(() => {
-    getAuthToken();
+    if (Object.keys(tokenInfo).length === 0) {
+      getAuthToken();
+    }
   }, []);
 
   //Second useEffect waits for tokenInfo state (acquired from first useEffect). When state changtes, makes various api calls

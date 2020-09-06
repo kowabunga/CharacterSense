@@ -4,6 +4,8 @@ import WoWState from './context/wow/WowState';
 import Header from './components/layout/Header';
 import HomePage from './components/pages/HomePage';
 import Dashboard from './components/pages/Dashboard';
+import Dungeons from './components/pages/Dungeons';
+import Raids from './components/pages/Raids';
 import './App.css';
 
 function App() {
@@ -15,8 +17,14 @@ function App() {
           <Route exact path='/'>
             <HomePage />
           </Route>
-          <Route exact path='/dashboard'>
+          <Route exact path='/characters'>
             <Dashboard />
+          </Route>
+          <Route exact path='/character/dungeons'>
+            <Dungeons />
+          </Route>
+          <Route exact path='/character/raids'>
+            <Raids />
           </Route>
         </Switch>
       </Router>

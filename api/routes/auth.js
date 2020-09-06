@@ -16,7 +16,7 @@ router.get(
   }),
   (req, res) => {
     console.log(req.user);
-    res.redirect(`http://localhost:3000/dashboard/${req.user.token}`);
+    res.redirect(`http://localhost:3000/characters`);
   }
 );
 
