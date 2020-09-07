@@ -11,6 +11,7 @@ module.exports = passport => {
         region: 'us',
       },
       async (accessToken, refreshToken, profile, done) => {
+        console.log(accessToken);
         //Check if user exists, if not save to db
         try {
           let user = await User.findOne({ bnetId: profile.id });

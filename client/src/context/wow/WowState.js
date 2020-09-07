@@ -2,7 +2,8 @@ import React, { useReducer, createRef } from 'react';
 import WowContext from './wowContext';
 import WowReducer from './wowReducer';
 import {
-  SET_ACCESS_TOKEN_INFO,
+  SET_CLIENT_ACCESS_TOKEN_INFO,
+  SET_OAUTH_ACCESS_TOKEN_INFO,
   SET_WOW_TOKEN,
   SET_MYTHIC_PLUS_AFFIXES,
   API_ERROR,
@@ -13,7 +14,8 @@ import axios from 'axios';
 const WoWState = props => {
   const initialState = {
     apiError: {},
-    tokenInfo: {},
+    clientTokenInfo: {},
+    oauthTokenInfo: {},
     wowTokenPrice: null,
     expansionDungeons: [],
     expansionRaids: [],
@@ -21,13 +23,27 @@ const WoWState = props => {
 
   const [state, dispatch] = useReducer(WowReducer, initialState);
 
-  const getAuthToken = async () => {
-    const res = await axios.post('/auth/token');
+  const getClientAuthToken = async () => {
+    const res = await axios.get('/auth/client_token');
     const tokenInfo = res.data;
     axios.defaults.headers.common[
       'Authorization'
     ] = `Bearer ${tokenInfo.access_token}`;
-    dispatch({ type: SET_ACCESS_TOKEN_INFO, payload: tokenInfo });
+    dispatch({ type: SET_CLIENT_ACCESS_TOKEN_INFO, payload: tokenInfo });
+  };
+
+  const getOAuthToken = async location => {
+    try {
+      if (location.search.length > 0) {
+        let authCode = location.search.split('&');
+        authCode = authCode[0].slice(6, authCode[0].length);
+        const data = await axios.get(`/auth/oauth_token/${authCode}`);
+
+        dispatch({ type: SET_OAUTH_ACCESS_TOKEN_INFO, payload: data.data });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getWowTokenPrice = async () => {
@@ -42,42 +58,10 @@ const WoWState = props => {
     }
   };
 
-  //@TODO Figure out how to get current weekly mythic keystone affixes
-  const getMythicPlusAffixes = async () => {
-    try {
-      const res = await axios.get(
-        'https://us.api.blizzard.com/data/wow/keystone-affix/index?namespace=static-us&locale=en_US'
-      );
-      // console.log(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getCharacters = async () => {
-    try {
-      const res = await axios.get(
-        `https://us.api.blizzard.com/profile/user/wow?namespace=profile-us&locale=en_US&access_token=${tokenInfo.access_token}`
-      );
-      console.log(res.data);
-    } catch (error) {
-      console.log(error.response);
-      dispatch({ type: API_ERROR, payload: error.response });
-    }
-  };
-
-  const getDungeonsByExpac = async () => {
-    const res = await axios.get(
-      `https://us.api.blizzard.com/profile/wow/character/stormrage/kowabungaga/encounters/dungeons?namespace=profile-us&locale=en_US&access_token=${tokenInfo.access_token}`
-    );
-    console.log(res.data);
-  };
-
-  const getRaidsByExpac = async () => {};
-
   const {
     apiError,
-    tokenInfo,
+    clientTokenInfo,
+    oauthTokenInfo,
     wowTokenPrice,
     expansionDungeons,
     expansionRaids,
@@ -87,15 +71,14 @@ const WoWState = props => {
     <WowContext.Provider
       value={{
         apiError,
-        tokenInfo,
+        clientTokenInfo,
+        oauthTokenInfo,
         wowTokenPrice,
         expansionDungeons,
         expansionRaids,
-        getAuthToken,
+        getClientAuthToken,
+        getOAuthToken,
         getWowTokenPrice,
-        getCharacters,
-        getMythicPlusAffixes,
-        getDungeonsByExpac,
       }}
     >
       {props.children}
