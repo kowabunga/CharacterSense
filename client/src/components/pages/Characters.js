@@ -22,7 +22,7 @@ const Characters = ({ location }) => {
   };
 
   console.log(oauthTokenInfo);
-  //@TODO Also need to make user route to store tokens before pulling into app!
+  //@TODO Also need to make user route to store tokens before pulling into app
   return (
     <div className='container'>
       {!oauthTokenInfo.access_token ? (
