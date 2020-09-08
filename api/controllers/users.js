@@ -99,10 +99,15 @@ exports.loginUser = async (req, res) => {
 
 exports.editPassword = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
-    if (!user) {
-      return res.status(400).json({ msg: 'No user found' });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+
+    const passHash = await hashItem(req.body.password);
+
+    await User.findByIdAndUpdate(req.userId, { password: passHash });
+    res.status(200).json({ msg: 'Password updated' });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

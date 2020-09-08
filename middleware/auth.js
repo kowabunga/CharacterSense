@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
     //verify token and add it to request
     const verifiedToken = jwt.verify(token, process.env.SECRET);
 
-    req.user = verifiedToken.user;
+    req.userId = verifiedToken.userId;
 
     next();
   } catch (error) {

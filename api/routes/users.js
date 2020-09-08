@@ -35,8 +35,8 @@ router.get('/login', loginUser);
 //@access   Private
 router.put(
   '/edit/password',
-  auth,
   [
+    auth,
     check('password').isLength(6),
     check('confirmPassword').custom((confirmPassword, { req }) => {
       if (confirmPassword !== req.body.password)
