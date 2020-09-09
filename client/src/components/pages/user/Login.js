@@ -16,7 +16,7 @@ const Login = () => {
   const [alertMsg, setAlertMsg] = useState('');
 
   //Cookies
-  const [cookie, setCookies] = useCookies(['charSensejwt']);
+  const [cookie, setCookie, removeCookie] = useCookies(['charsensejwt']);
 
   const history = useHistory();
 
@@ -25,8 +25,10 @@ const Login = () => {
       e.preventDefault();
       const user = { email, password };
 
-      await axios.get('/users/login', {
-        params: user,
+      await axios.post('/users/login', user, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       setUserJwt(cookie);

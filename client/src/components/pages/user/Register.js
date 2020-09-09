@@ -20,7 +20,7 @@ const Register = () => {
   const [alertMsg, setAlertMsg] = useState('');
 
   //Cookies
-  const [cookie, setCookies] = useCookies(['charsensejwt']);
+  const [cookie, setCookies, removeCookie] = useCookies(['charsensejwt']);
 
   const history = useHistory();
 

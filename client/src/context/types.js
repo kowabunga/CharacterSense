@@ -7,3 +7,4 @@ export const API_ERROR = ' API_ERROR';
 
 /* ---- User Types ----*/
 export const SET_JWT = 'SET_JWT';
+export const REMOVE_JWT = 'REMOVE_JWT';

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import UserContext from '../../context/user/userContext';
+import { useCookies } from 'react-cookie';
 import Header from '../layout/Header';
 import Dashboard from './Dashboard';
 import Characters from './Characters';
@@ -9,6 +11,15 @@ import Login from './user/Login';
 import Register from './user/Register';
 
 const Home = () => {
+  const userContext = useContext(UserContext);
+  const { setUserJwt } = userContext;
+
+  const [cookie, setCookie, removeCookie] = useCookies(['charsensejwt']);
+
+  useEffect(() => {
+    setUserJwt(cookie);
+  }, [cookie]);
+
   return (
     <Router>
       <Header />

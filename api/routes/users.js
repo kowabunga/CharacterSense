@@ -28,7 +28,7 @@ router.post(
 //@route    POST /users/login
 //@desc     Log user in to CharacterSense
 //@access   Public
-router.get('/login', loginUser);
+router.post('/login', loginUser);
 
 //@route    PUT /users/edit/password
 //@desc     Edit user password

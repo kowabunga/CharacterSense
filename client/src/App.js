@@ -11,7 +11,7 @@ const App = () => {
     <CookiesProvider>
       <UserState>
         <WoWState>
-          <Home exact path='/' />
+          <Home />
         </WoWState>
       </UserState>
     </CookiesProvider>

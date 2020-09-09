@@ -1,13 +1,20 @@
 import React, { useContext } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import UserContext from '../../context/user/userContext';
+import { useCookies } from 'react-cookie';
 
 const Header = () => {
   const userContext = useContext(UserContext);
-  const { jwt } = userContext;
+  const { jwt, removeUserJwt } = userContext;
+
+  const [cookie, setCookies, removeCookie] = useCookies(['charsensejwt']);
+
+  const history = useHistory();
 
   const logout = () => {
-    console.log('logged out');
+    removeCookie('charsensejwt');
+    removeUserJwt();
+    history.push('/');
   };
 
   return (
