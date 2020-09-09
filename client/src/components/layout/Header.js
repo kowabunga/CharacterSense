@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import WowContext from '../../context/wow/wowContext';
+import UserContext from '../../context/user/userContext';
 
 const Header = () => {
-  const wowContext = useContext(WowContext);
-  const { loggedIn } = wowContext;
+  const userContext = useContext(UserContext);
+  const { jwt } = userContext;
 
   const logout = () => {
     console.log('logged out');
@@ -23,14 +23,18 @@ const Header = () => {
       <div className='collapse navbar-collapse' id='navCollapse'>
         <ul className='navbar-nav ml-auto'>
           <li className='nav-item'>
-            {!loggedIn && (
+            {!jwt && (
               <NavLink to='/login' className='nav-link'>
                 Login
               </NavLink>
             )}
           </li>
           <li className='nav-item'>
-            {loggedIn && <NavLink onClick={logout}>Logout</NavLink>}
+            {jwt && (
+              <a href='#!' className='nav-link' onClick={logout}>
+                Logout
+              </a>
+            )}
           </li>
           <li className='nav-item'>
             <NavLink to='/characters' className='nav-link'>

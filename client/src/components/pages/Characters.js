@@ -1,10 +1,14 @@
 import React, { useEffect, useContext } from 'react';
 import WowContext from '../../context/wow/wowContext';
+import UserContext from '../../context/user/userContext';
 import axios from 'axios';
 
 const Characters = ({ location }) => {
   const wowContext = useContext(WowContext);
   const { oauthTokenInfo, getOAuthToken } = wowContext;
+
+  const userContext = useContext(UserContext);
+  const { jwt } = userContext;
 
   //If token info is empty, redirect to home page
   useEffect(() => {
@@ -13,6 +17,10 @@ const Characters = ({ location }) => {
       getOAuthToken(location);
     }
   }, []);
+
+  useEffect(() => {
+    console.log(jwt);
+  }, [jwt]);
 
   const testLink = async () => {
     const response = await axios.get(

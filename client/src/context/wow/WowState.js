@@ -1,4 +1,4 @@
-import React, { useReducer, createRef } from 'react';
+import React, { useReducer } from 'react';
 import WowContext from './wowContext';
 import WowReducer from './wowReducer';
 import {
@@ -7,7 +7,7 @@ import {
   SET_WOW_TOKEN,
   SET_MYTHIC_PLUS_AFFIXES,
   API_ERROR,
-} from './types';
+} from '../types';
 
 import axios from 'axios';
 

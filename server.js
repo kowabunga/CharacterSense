@@ -4,7 +4,8 @@ const connectDb = require('./config/db');
 const passport = require('passport');
 const cors = require('cors');
 const bnetPassport = require('./config/passport');
-const cookieSession = require('cookie-session');
+// const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser');
 
 //Initialize bnet passport strategy
 bnetPassport(passport);
@@ -14,15 +15,15 @@ connectDb();
 
 const app = express();
 app.use(cors());
-
+app.use(cookieParser());
 app.use(express.json({ extended: false }));
 
-app.use(
-  cookieSession({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys: [process.env.COOKIE_SESSION_KEY],
-  })
-);
+// app.use(
+//   cookieSession({
+//     maxAge: 24 * 60 * 60 * 1000,
+//     keys: [process.env.COOKIE_SESSION_KEY],
+//   })
+// );
 
 //Initialize passport - allows for use of oauth
 app.use(passport.initialize());

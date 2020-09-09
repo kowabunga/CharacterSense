@@ -4,7 +4,7 @@ import {
   SET_WOW_TOKEN,
   SET_MYTHIC_PLUS_AFFIXES,
   API_ERROR,
-} from './types';
+} from '../types';
 
 export default (state, action) => {
   const { type, payload } = action;
