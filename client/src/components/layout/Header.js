@@ -1,10 +1,14 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import WowContext from '../../context/wow/wowContext';
 
 const Header = () => {
   const wowContext = useContext(WowContext);
   const { loggedIn } = wowContext;
+
+  const logout = () => {
+    console.log('logged out');
+  };
 
   return (
     <nav className='navbar bg-light navbar-light navbar-expand-sm'>
@@ -20,23 +24,18 @@ const Header = () => {
         <ul className='navbar-nav ml-auto'>
           <li className='nav-item'>
             {!loggedIn && (
-              <a href='http://localhost:5000/auth/bnet' className='nav-link'>
+              <NavLink to='/login' className='nav-link'>
                 Login
-              </a>
-            )}
-          </li>
-
-          <li className='nav-item'>
-            {!loggedIn && (
-              <a href='http://localhost:5000/auth/logout' className='nav-link'>
-                Logout
-              </a>
+              </NavLink>
             )}
           </li>
           <li className='nav-item'>
-            <Link to='/characters' className='nav-link'>
+            {loggedIn && <NavLink onClick={logout}>Logout</NavLink>}
+          </li>
+          <li className='nav-item'>
+            <NavLink to='/characters' className='nav-link'>
               My Characters
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>
