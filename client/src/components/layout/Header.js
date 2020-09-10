@@ -1,21 +1,20 @@
-import React, { useContext } from 'react';
-import { Link, NavLink, useHistory } from 'react-router-dom';
-import UserContext from '../../context/user/userContext';
+import React, { useEffect, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 const Header = () => {
-  const userContext = useContext(UserContext);
-  const { jwt, removeUserJwt } = userContext;
-
   const [cookie, setCookies, removeCookie] = useCookies(['charsensejwt']);
 
-  const history = useHistory();
+  const [loggedIn, setLoggedIn] = useState(Object.keys(cookie).length > 0);
 
   const logout = () => {
     removeCookie('charsensejwt');
-    removeUserJwt();
-    history.push('/');
   };
+
+  useEffect(() => {
+    setLoggedIn(Object.keys(cookie).length > 0);
+    console.log('rendering');
+  });
 
   return (
     <nav className='navbar bg-light navbar-light navbar-expand-sm'>
@@ -30,23 +29,27 @@ const Header = () => {
       <div className='collapse navbar-collapse' id='navCollapse'>
         <ul className='navbar-nav ml-auto'>
           <li className='nav-item'>
-            {!jwt && (
+            {!loggedIn && (
               <NavLink to='/login' className='nav-link'>
                 Login
               </NavLink>
             )}
           </li>
+
           <li className='nav-item'>
-            {jwt && (
-              <a href='#!' className='nav-link' onClick={logout}>
+            {loggedIn && (
+              <NavLink to='/' className='nav-link' onClick={logout}>
                 Logout
-              </a>
+              </NavLink>
             )}
           </li>
+
           <li className='nav-item'>
-            <NavLink to='/characters' className='nav-link'>
-              My Characters
-            </NavLink>
+            {loggedIn && (
+              <NavLink to='/characters' className='nav-link'>
+                My Characters
+              </NavLink>
+            )}
           </li>
         </ul>
       </div>

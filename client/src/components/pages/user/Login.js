@@ -1,12 +1,9 @@
-import React, { useState, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import UserContext from '../../../context/user/userContext';
 import axios from 'axios';
 
 const Login = () => {
-  const userContext = useContext(UserContext);
-  const { setUserJwt } = userContext;
   //Form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,16 +28,28 @@ const Login = () => {
         },
       });
 
-      setUserJwt(cookie);
-
       history.push('/characters');
     } catch (error) {
-      console.error(error);
+      if (error.response !== undefined && error.response.data.errors[0].msg) {
+        setShowAlert(true);
+        setAlertMsg(error.response.data.errors[0].msg);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 5000);
+      } else {
+        setShowAlert(true);
+        setAlertMsg('Something went wrong, please try again.');
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 5000);
+      }
     }
   };
 
   return (
     <div className='container'>
+      {Object.keys(cookie).length > 0 && <Redirect to='/characters' />}
+
       {showAlert && (
         <div className={`alert alert-danger text-center mt-3 mb-1`}>
           {alertMsg}

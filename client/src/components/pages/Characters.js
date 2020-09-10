@@ -1,26 +1,17 @@
 import React, { useEffect, useContext } from 'react';
 import WowContext from '../../context/wow/wowContext';
-import UserContext from '../../context/user/userContext';
 import axios from 'axios';
 
 const Characters = ({ location }) => {
   const wowContext = useContext(WowContext);
   const { oauthTokenInfo, getOAuthToken } = wowContext;
 
-  const userContext = useContext(UserContext);
-  const { jwt } = userContext;
-
   //If token info is empty, redirect to home page
   useEffect(() => {
-    console.log('ran');
     if (Object.keys(oauthTokenInfo).length === 0) {
       getOAuthToken(location);
     }
   }, []);
-
-  useEffect(() => {
-    console.log(jwt);
-  }, [jwt]);
 
   const testLink = async () => {
     const response = await axios.get(
@@ -30,7 +21,6 @@ const Characters = ({ location }) => {
   };
 
   console.log(oauthTokenInfo);
-  //@TODO Also need to make user route to store tokens before pulling into app
   return (
     <div className='container'>
       {!oauthTokenInfo.access_token ? (
