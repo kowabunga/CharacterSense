@@ -9,6 +9,29 @@ const hashItem = async itemToHash => {
   return hashedItem;
 };
 
+exports.getUser = async (req, res) => {
+  try {
+    const id = req.userId;
+    const user = await User.findById(id).select('-password');
+    if (!user) {
+      return res.status(400).json({ msg: 'User cannot be found' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+exports.updateUserOAuthToken = async (req, res) => {
+  try {
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 exports.registerUser = async (req, res) => {
   try {
     //Check express-validator middleware for errors

@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const Login = () => {
   const userContext = useContext(UserContext);
-  const { setUserJwt } = userContext;
+  const { setUserJwt, getUser, jwt, user } = userContext;
   //Form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,16 +16,16 @@ const Login = () => {
   const [alertMsg, setAlertMsg] = useState('');
 
   //Cookies
-  const [cookie, setCookie, removeCookie] = useCookies(['charsensejwt']);
+  const [cookie, setCookie] = useCookies(['charsensejwt']);
 
   const history = useHistory();
 
   const onLogin = async e => {
     try {
       e.preventDefault();
-      const user = { email, password };
+      const loginInfo = { email, password };
 
-      const tokenData = await axios.post('/users/login', user, {
+      const tokenData = await axios.post('/users/login', loginInfo, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -36,27 +36,38 @@ const Login = () => {
       setUserJwt(token);
       setCookie('charsensejwt', token);
 
-      history.push('/characters');
+      await getUser(token);
+
+      history.push('/auth');
     } catch (error) {
-      if (error.response !== undefined && error.response.data.errors[0].msg) {
-        setShowAlert(true);
-        setAlertMsg(error.response.data.errors[0].msg);
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 5000);
-      } else {
-        setShowAlert(true);
-        setAlertMsg('Something went wrong, please try again.');
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 5000);
-      }
+      console.log(error);
+      // if (error.response) {
+      //   setShowAlert(true);
+      //   setAlertMsg(
+      //     error.response.data.msg || error.response.data.errors[0].msg
+      //   );
+      //   setTimeout(() => {
+      //     setShowAlert(false);
+      //   }, 5000);
+      // } else if (error.request) {
+      //   setShowAlert(true);
+      //   setAlertMsg(error.request);
+      //   setTimeout(() => {
+      //     setShowAlert(false);
+      //   }, 5000);
+      // } else {
+      //   setShowAlert(true);
+      //   setAlertMsg('Something went wrong, please try again.');
+      //   setTimeout(() => {
+      //     setShowAlert(false);
+      //   }, 5000);
+      // }
     }
   };
 
   return (
     <div className='container'>
-      {Object.keys(cookie).length > 0 && <Redirect to='/characters' />}
+      {jwt && <Redirect to='/characters' />}
 
       {showAlert && (
         <div className={`alert alert-danger text-center mt-3 mb-1`}>

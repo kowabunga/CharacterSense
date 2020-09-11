@@ -1,17 +1,20 @@
-import React, { useEffect, useContext } from 'react';
-import WowContext from '../../context/wow/wowContext';
+import React, { useContext, useEffect } from 'react';
+import WowContext from '../../../context/wow/wowContext';
+import UserContext from '../../../context/user/userContext';
 import axios from 'axios';
 
 const Characters = ({ location }) => {
   const wowContext = useContext(WowContext);
-  const { oauthTokenInfo, getOAuthToken } = wowContext;
+  const { oauthTokenInfo } = wowContext;
 
-  //If token info is empty, redirect to home page
+  const userContext = useContext(UserContext);
+  const {
+    user: { accessToken },
+  } = userContext;
+
   useEffect(() => {
-    if (Object.keys(oauthTokenInfo).length === 0) {
-      getOAuthToken(location);
-    }
-  }, []);
+    console.log(accessToken);
+  });
 
   const testLink = async () => {
     const response = await axios.get(
@@ -22,10 +25,10 @@ const Characters = ({ location }) => {
 
   return (
     <div className='container'>
-      {!oauthTokenInfo.access_token ? (
+      {!accessToken ? (
         <a
           className='mx-auto'
-          href={`https://us.battle.net/oauth/authorize?client_id=${process.env.REACT_APP_BNET_ID}&scope=wow.profile&redirect_uri=http://localhost:3000/characters&response_type=code&state=`}
+          href={`https://us.battle.net/oauth/authorize?client_id=${process.env.REACT_APP_BNET_ID}&scope=wow.profile&redirect_uri=http://localhost:3000/auth&response_type=code&state=`}
         >
           Authorize
         </a>

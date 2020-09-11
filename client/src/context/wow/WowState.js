@@ -3,7 +3,6 @@ import WowContext from './wowContext';
 import WowReducer from './wowReducer';
 import {
   SET_CLIENT_ACCESS_TOKEN_INFO,
-  SET_OAUTH_ACCESS_TOKEN_INFO,
   SET_WOW_TOKEN,
   SET_MYTHIC_PLUS_AFFIXES,
   API_ERROR,
@@ -15,7 +14,6 @@ const WoWState = props => {
   const initialState = {
     apiError: {},
     clientTokenInfo: {},
-    oauthTokenInfo: {},
     wowTokenPrice: null,
     expansionDungeons: [],
     expansionRaids: [],
@@ -30,20 +28,6 @@ const WoWState = props => {
       'Authorization'
     ] = `Bearer ${tokenInfo.access_token}`;
     dispatch({ type: SET_CLIENT_ACCESS_TOKEN_INFO, payload: tokenInfo });
-  };
-
-  const getOAuthToken = async location => {
-    try {
-      if (location.search.length > 0) {
-        let authCode = location.search.split('&');
-        authCode = authCode[0].slice(6, authCode[0].length);
-        const data = await axios.get(`/auth/oauth_token/${authCode}`);
-
-        dispatch({ type: SET_OAUTH_ACCESS_TOKEN_INFO, payload: data.data });
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const getWowTokenPrice = async () => {
@@ -72,12 +56,10 @@ const WoWState = props => {
       value={{
         apiError,
         clientTokenInfo,
-        oauthTokenInfo,
         wowTokenPrice,
         expansionDungeons,
         expansionRaids,
         getClientAuthToken,
-        getOAuthToken,
         getWowTokenPrice,
       }}
     >

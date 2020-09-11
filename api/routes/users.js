@@ -6,7 +6,13 @@ const {
   registerUser,
   loginUser,
   editPassword,
+  getUser,
 } = require('../controllers/users');
+
+//@route    GET /users/user
+//@desc     Get user information
+//@access   Private
+router.get('/user', auth, getUser);
 
 //@route    POST /users/register
 //@desc     Register user with CharacterSense
@@ -17,7 +23,7 @@ router.post(
     check('email', 'Email already in use.').isEmail(),
     check('password', 'Password must be at least six characters').isLength(6),
     check('confirmPassword').custom((confirmPassword, { req }) => {
-      if (confirmPassword !== req.body.password)
+      if (confirmPassword !== req.body.passWword)
         throw new Error('Passwords do not match');
       return true;
     }),

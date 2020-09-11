@@ -8,3 +8,5 @@ export const API_ERROR = ' API_ERROR';
 /* ---- User Types ----*/
 export const SET_JWT = 'SET_JWT';
 export const REMOVE_JWT = 'REMOVE_JWT';
+export const SET_USER = 'SET_USER';
+export const UPDATE_USER_OAUTH_TOKEN = 'UPDATE_USER_OAUTH_TOKEN';
