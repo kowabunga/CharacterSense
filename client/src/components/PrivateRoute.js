@@ -1,17 +1,15 @@
 import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import UserContext from '../context/user/userContext';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const [cookie, setCookies, removeCookie] = useCookies(['charsensejwt']);
-
-  const loggedIn = Object.keys(cookie).length > 0;
-
+  const userContext = useContext(UserContext);
+  const { jwt } = userContext;
   return (
     <Route
       {...rest}
       render={props =>
-        loggedIn ? <Component {...props} /> : <Redirect to='/login' />
+        jwt ? <Component {...props} /> : <Redirect to='/login' />
       }
     />
   );

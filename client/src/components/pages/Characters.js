@@ -20,7 +20,6 @@ const Characters = ({ location }) => {
     console.log(response.data);
   };
 
-  console.log(oauthTokenInfo);
   return (
     <div className='container'>
       {!oauthTokenInfo.access_token ? (

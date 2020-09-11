@@ -9,7 +9,7 @@ import Raids from './Raids';
 import Login from './user/Login';
 import Register from './user/Register';
 
-const Home = () => {
+const CharacterSense = () => {
   return (
     <Router>
       <Header />
@@ -33,4 +33,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default CharacterSense;

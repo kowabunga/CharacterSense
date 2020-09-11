@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';

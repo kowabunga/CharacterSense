@@ -54,8 +54,8 @@ exports.registerUser = async (req, res) => {
       { expiresIn: '7d' },
       (error, token) => {
         if (error) throw error;
-        res.cookie('charsensejwt', token).json({ msg: 'JWT Set' });
-        // res.status(201).json({ token: token });
+        // res.cookie('charsensejwt', token).json({ msg: 'JWT Set' });
+        res.status(201).json({ token: token });
       }
     );
   } catch (error) {
@@ -89,8 +89,8 @@ exports.loginUser = async (req, res) => {
       { expiresIn: '7d' },
       (error, token) => {
         if (error) throw error;
-        res.cookie('charsensejwt', token).json({ msg: 'JWT Set' });
-        // res.status(201).json({ token: token });
+        // res.cookie('charsensejwt', token).json({ msg: 'JWT Set' });
+        res.status(201).json({ token: token });
       }
     );
   } catch (error) {

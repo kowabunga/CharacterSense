@@ -1,9 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import UserContext from '../../../context/user/userContext';
 import axios from 'axios';
 
 const Login = () => {
+  const userContext = useContext(UserContext);
+  const { setUserJwt } = userContext;
   //Form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,11 +25,16 @@ const Login = () => {
       e.preventDefault();
       const user = { email, password };
 
-      await axios.post('/users/login', user, {
+      const tokenData = await axios.post('/users/login', user, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
+
+      const token = tokenData.data.token;
+
+      setUserJwt(token);
+      setCookie('charsensejwt', token);
 
       history.push('/characters');
     } catch (error) {
