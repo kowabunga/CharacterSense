@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const Login = () => {
   const userContext = useContext(UserContext);
-  const { setUserJwt, getUser, jwt, user } = userContext;
+  const { setUserJwt, getUser, jwt } = userContext;
   //Form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,12 +32,10 @@ const Login = () => {
       });
 
       const token = tokenData.data.token;
-
       setUserJwt(token);
       setCookie('charsensejwt', token);
 
       await getUser(token);
-
       history.push('/auth');
     } catch (error) {
       console.log(error);

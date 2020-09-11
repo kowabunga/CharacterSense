@@ -18,7 +18,7 @@ exports.getClientToken = async (req, res) => {
     // console.log(response.data);
     res.status(200).json(response.data);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
   }
 };
 
@@ -33,7 +33,6 @@ exports.getOAuthToken = async (req, res) => {
   */
   try {
     //axios request based on cURL above
-    console.log(req.params.code);
     const response = await axios.post(
       'https://us.battle.net/oauth/token',
       null,
@@ -43,13 +42,13 @@ exports.getOAuthToken = async (req, res) => {
           client_secret: process.env.BNET_SECRET,
           grant_type: 'authorization_code',
           scope: 'wow.profile',
-          redirect_uri: 'http://localhost:3000/characters',
+          redirect_uri: 'http://localhost:3000/auth',
           code: req.params.code,
         },
       }
     );
     res.status(200).json(response.data);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
   }
 };

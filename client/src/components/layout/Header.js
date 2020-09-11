@@ -36,6 +36,14 @@ const Header = () => {
           </li>
 
           <li className='nav-item'>
+            {!jwt && (
+              <NavLink to='/register' className='nav-link'>
+                Register
+              </NavLink>
+            )}
+          </li>
+
+          <li className='nav-item'>
             {jwt && (
               <NavLink to='/' className='nav-link' onClick={logout}>
                 Logout

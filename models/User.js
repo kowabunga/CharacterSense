@@ -24,6 +24,10 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
+  accessTokenExpiry: {
+    type: Number,
+    default: null,
+  },
 });
 
 module.exports = User = mongoose.model('user', UserSchema);

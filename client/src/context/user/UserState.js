@@ -1,5 +1,4 @@
 import React, { useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
 import UserContext from './userContext';
 import UserReducer from './userReducer';
 import axios from 'axios';
@@ -12,7 +11,6 @@ import {
 } from '../types';
 
 const UserState = props => {
-  const history = useHistory();
   const initialState = {
     jwt: null,
     user: {},
@@ -20,7 +18,9 @@ const UserState = props => {
 
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
-  const setUserJwt = async token => {
+  const { jwt, user } = state;
+
+  const setUserJwt = token => {
     dispatch({ type: SET_JWT, payload: token });
   };
 
@@ -37,26 +37,35 @@ const UserState = props => {
     user.data && dispatch({ type: SET_USER, payload: user.data });
   };
 
-  const getOAuthToken = async location => {
-    console.log(location);
+  const getOAuthToken = async (jwt, location) => {
     try {
+      console.log('I got called ', jwt);
       if (location.search.length > 0) {
         let authCode = location.search.split('&');
         authCode = authCode[0].slice(6, authCode[0].length);
-        console.log(authCode);
+        // console.log(authCode);
 
         const data = await axios.get(`/auth/oauth_token/${authCode}`);
+        // console.log(data.data);
+        const user = await axios.put(
+          '/users/user/addToken',
+          {
+            accessToken: data.data.access_token,
+            expiry: data.data.expires_in,
+          },
+          {
+            headers: {
+              'x-auth-token': jwt,
+            },
+          }
+        );
 
-        console.log(data.data);
-
-        dispatch({ type: UPDATE_USER_OAUTH_TOKEN, payload: data.data });
+        user.data && dispatch({ type: SET_USER, payload: user.data });
       }
     } catch (error) {
       console.error(error);
     }
   };
-
-  const { jwt, user } = state;
 
   return (
     <UserContext.Provider

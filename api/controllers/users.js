@@ -26,6 +26,14 @@ exports.getUser = async (req, res) => {
 
 exports.updateUserOAuthToken = async (req, res) => {
   try {
+    const { accessToken, expiry } = req.body;
+    console.log(req.userId);
+    const user = await User.findByIdAndUpdate(req.userId, {
+      accessToken: accessToken,
+      accessTokenExpiry: expiry,
+    });
+
+    res.status(200).json(user);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

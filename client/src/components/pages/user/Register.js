@@ -1,9 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import UserContext from '../../../context/user/userContext';
 import axios from 'axios';
 
 const Register = () => {
+  const userContext = useContext(UserContext);
+  const { setUserJwt, getUser, jwt } = userContext;
+
   //Form state
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -16,7 +20,7 @@ const Register = () => {
   const [alertMsg, setAlertMsg] = useState('');
 
   //Cookies
-  const [cookie, setCookies, removeCookie] = useCookies(['charsensejwt']);
+  const [cookie, setCookie, removeCookie] = useCookies(['charsensejwt']);
 
   const history = useHistory();
 
@@ -31,13 +35,19 @@ const Register = () => {
         confirmPassword,
       };
 
-      await axios.post('/users/register', user, {
+      const tokenData = await axios.post('/users/register', user, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      history.push('/characters');
+      const token = tokenData.data.token;
+
+      setUserJwt(token);
+      setCookie('charsensejwt', token);
+
+      await getUser(token);
+      history.push('/auth');
     } catch (error) {
       if (error.response !== undefined && error.response.data.errors[0].msg) {
         setShowAlert(true);
@@ -57,7 +67,7 @@ const Register = () => {
 
   return (
     <div className='container'>
-      {cookie && <Redirect to='/characters' />}
+      {jwt && <Redirect to='/characters' />}
 
       {showAlert && (
         <div className={`alert alert-danger text-center mt-3 mb-1`}>

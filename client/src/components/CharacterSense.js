@@ -14,12 +14,15 @@ import Register from './pages/user/Register';
 
 const CharacterSense = () => {
   const userContext = useContext(UserContext);
-  const { jwt, setUserJwt } = userContext;
+  const { jwt, setUserJwt, getUser } = userContext;
 
   const [cookie] = useCookies(['charsensejwt']);
 
   useEffect(() => {
-    !jwt && setUserJwt(cookie.charsensejwt);
+    !jwt &&
+      cookie.charsensejwt !== undefined &&
+      setUserJwt(cookie.charsensejwt);
+    jwt && getUser(cookie.charsensejwt);
   }, []);
 
   return (
