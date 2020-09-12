@@ -11,6 +11,7 @@ import Dungeons from './pages/Dungeons';
 import Raids from './pages/Raids';
 import Login from './pages/user/Login';
 import Register from './pages/user/Register';
+import Account from './pages/user/Account';
 
 const CharacterSense = () => {
   const userContext = useContext(UserContext);
@@ -33,6 +34,7 @@ const CharacterSense = () => {
         <Route exact path='/login' component={Login} />
         <Route exact path='/register' component={Register} />
         <Route exact path='/auth' component={Auth} />
+        <PrivateRoute exact path='/account' component={Account} />
         <PrivateRoute exact path='/characters' component={Characters} />
         <PrivateRoute
           exact

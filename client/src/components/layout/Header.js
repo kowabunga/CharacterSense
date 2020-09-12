@@ -58,6 +58,14 @@ const Header = () => {
               </NavLink>
             )}
           </li>
+
+          <li className='nav-item'>
+            {jwt && (
+              <NavLink to='/account' className='nav-link'>
+                My Account
+              </NavLink>
+            )}
+          </li>
         </ul>
       </div>
     </nav>

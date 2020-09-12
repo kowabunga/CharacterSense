@@ -3,12 +3,7 @@ import UserContext from './userContext';
 import UserReducer from './userReducer';
 import axios from 'axios';
 
-import {
-  SET_JWT,
-  REMOVE_JWT,
-  SET_USER,
-  UPDATE_USER_OAUTH_TOKEN,
-} from '../types';
+import { SET_JWT, REMOVE_JWT, SET_USER } from '../types';
 
 const UserState = props => {
   const initialState = {
