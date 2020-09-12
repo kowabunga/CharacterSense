@@ -22,7 +22,7 @@ const CharacterSense = () => {
     !jwt &&
       cookie.charsensejwt !== undefined &&
       setUserJwt(cookie.charsensejwt);
-    jwt && getUser(cookie.charsensejwt);
+    (jwt || cookie.charsensejwt) && getUser(cookie.charsensejwt);
   }, []);
 
   return (

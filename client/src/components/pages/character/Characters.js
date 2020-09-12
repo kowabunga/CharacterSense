@@ -8,20 +8,20 @@ const Characters = ({ location }) => {
   const {} = wowContext;
 
   const userContext = useContext(UserContext);
-  const {
-    user: { accessToken },
-  } = userContext;
+  const { user } = userContext;
 
-  useEffect(() => {
-    console.log(accessToken);
-  });
+  const { accessToken } = user;
+
+  const test = async () => {
+    const data = await axios.get(
+      `https://us.api.blizzard.com/profile/user/wow?namespace=profile-us&locale=en_US&access_token=${accessToken}`
+    );
+    console.log(data.data);
+  };
 
   return (
     <div className='container'>
-      <button
-        className='btn btn-primary mx-auto'
-        onClick={() => console.log(accessToken)}
-      >
+      <button className='btn btn-primary mx-auto' onClick={test}>
         Show
       </button>
     </div>
