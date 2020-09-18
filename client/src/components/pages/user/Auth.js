@@ -6,32 +6,39 @@ const Auth = ({ location }) => {
   const userContext = useContext(UserContext);
   const {
     jwt,
+    validToken,
     user: { accessToken },
     getOAuthToken,
+    checkIfTokenValid,
+    getUser,
   } = userContext;
 
+  const history = useHistory();
+
   useEffect(() => {
-    //Here's a weird one
     //When the page gets redirected by the authorize link below (in the return statement) the application state gets cleared.
     //It has to wait for the main app to reload the jwt into state from cookies
     //the useEffect watches for changes in the state jwt, and once all conditions are satisfied, calls a function that updates the user and stores updated user in context
+
     const authorize = async () => {
+      //If access token from user data is null, user has never authenticated - must authenticate.
+      if (accessToken === null) return;
+
+      //If access token is present in user data, check if token is valid or not. If valid, redirect to character page. If invalid, must reauthorize.
       if (accessToken) {
-        history.push('/characters');
+        const tokenCheckRes = await checkIfTokenValid(accessToken);
+        tokenCheckRes && history.push('/characters');
       } else if (location.search.length > 0 && !accessToken && jwt) {
-        console.log('this is the jwt ');
         await getOAuthToken(jwt, location);
+        await getUser(jwt);
         history.push('/characters');
       }
     };
     authorize();
   }, [jwt]);
 
-  const history = useHistory();
-
   return (
     <div className='jumbotron text-center'>
-      {accessToken && <Redirect to='/characters' />}
       <p className='display-2'>
         Almost there! Just <em>one</em> more thing...
       </p>

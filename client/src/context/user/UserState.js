@@ -13,7 +13,7 @@ const UserState = props => {
 
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
-  const { jwt, user } = state;
+  const { jwt, user, validToken } = state;
 
   const setUserJwt = token => {
     dispatch({ type: SET_JWT, payload: token });
@@ -34,7 +34,6 @@ const UserState = props => {
 
   const getOAuthToken = async (jwt, location) => {
     try {
-      console.log('I got called ', jwt);
       if (location.search.length > 0) {
         let authCode = location.search.split('&');
         authCode = authCode[0].slice(6, authCode[0].length);
@@ -46,7 +45,7 @@ const UserState = props => {
           '/users/user/addToken',
           {
             accessToken: data.data.access_token,
-            expiry: data.data.expires_in,
+            expiry: data.data.expires_in + Math.floor(Date.now() / 1000),
           },
           {
             headers: {
@@ -62,9 +61,39 @@ const UserState = props => {
     }
   };
 
+  const checkIfTokenValid = async token => {
+    const res = await axios.post(`/auth/oauth_token/check`, {
+      token: token,
+    });
+
+    const resData = res.data;
+    //Above request will return one of two things... on a 400/404 error - it will return the erro data containing an 'invalid_token' string. On success, it will return an object containing within an authoritie sarray indicating its authentication
+
+    //Calling function expects a boolean result
+
+    if (resData === 'invalid_token') {
+      return false;
+    }
+
+    if (resData.authorities[0] === 'IS_AUTHENTICATED_FULLY') {
+      //If we are authenticated, we should update the expiration date in the user account for this token.
+      console.log(resData);
+      return true;
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ jwt, user, setUserJwt, removeUserJwt, getUser, getOAuthToken }}
+      value={{
+        jwt,
+        user,
+        validToken,
+        setUserJwt,
+        removeUserJwt,
+        getUser,
+        getOAuthToken,
+        checkIfTokenValid,
+      }}
     >
       {props.children}
     </UserContext.Provider>

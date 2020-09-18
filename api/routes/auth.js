@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-const { getClientToken, getOAuthToken } = require('../controllers/auth');
+const {
+  getClientToken,
+  getOAuthToken,
+  checkIfTokenValid,
+} = require('../controllers/auth');
 
 // @route   GET /auth/bnet
 // @desc    Authenticate with bnet
@@ -30,8 +34,12 @@ router.get(
 //@desc     Get access token from bnet
 router.get('/client_token', getClientToken);
 
-//@route    POST /auth/token
+//@route    POST oauth_token/:code
 //@desc     Get access token from bnet
 router.get('/oauth_token/:code', getOAuthToken);
+
+//@route    POST oauth_token/check
+//@desc     Check if token is valid, is not redirect to request new one
+router.post('/oauth_token/check', checkIfTokenValid);
 
 module.exports = router;

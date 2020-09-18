@@ -49,6 +49,31 @@ exports.getOAuthToken = async (req, res) => {
     );
     res.status(200).json(response.data);
   } catch (error) {
-    // console.error(error);
+    console.error(error);
+  }
+};
+
+exports.checkIfTokenValid = async (req, res) => {
+  try {
+    console.log(req.body.token);
+    const { token } = req.body;
+    const response = await axios.post(
+      `https://us.battle.net/oauth/check_token?token=${token}`,
+      null,
+      {
+        // params: {
+        //   client_id: process.env.BNET_ID,
+        //   client_secret: process.env.BNET_SECRET,
+        // },
+      }
+    );
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    if (error.response.data) {
+      res.send(error.response.data.error);
+    } else {
+      res.status(500).send('Internal Server Error');
+    }
   }
 };
