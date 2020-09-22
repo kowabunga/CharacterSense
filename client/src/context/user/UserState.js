@@ -61,6 +61,7 @@ const UserState = props => {
     }
   };
 
+  //@TODO run checks on token validation/login
   const checkIfTokenValid = async token => {
     const res = await axios.post(`/auth/oauth_token/check`, {
       token: token,
@@ -74,11 +75,11 @@ const UserState = props => {
     if (resData === 'invalid_token') {
       return false;
     }
-
+    console.log(resData.authorities[0]);
     if (resData.authorities[0] === 'IS_AUTHENTICATED_FULLY') {
       //If we are authenticated, we should update the expiration date in the user account for this token.
       console.log(resData);
-      return true;
+      return Date.now() - resData.exp > 10800;
     }
   };
 

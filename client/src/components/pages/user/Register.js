@@ -46,7 +46,7 @@ const Register = () => {
       setUserJwt(token);
       setCookie('charsensejwt', token);
 
-      await getUser(token);
+      getUser(token);
       history.push('/auth');
     } catch (error) {
       if (error.response !== undefined && error.response.data.errors[0].msg) {
@@ -67,8 +67,6 @@ const Register = () => {
 
   return (
     <div className='container'>
-      {jwt && <Redirect to='/characters' />}
-
       {showAlert && (
         <div className={`alert alert-danger text-center mt-3 mb-1`}>
           {alertMsg}

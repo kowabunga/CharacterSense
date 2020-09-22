@@ -8,7 +8,7 @@ const Characters = ({ location }) => {
   const {} = wowContext;
 
   const userContext = useContext(UserContext);
-  const { user } = userContext;
+  const { user, checkIfTokenValid } = userContext;
 
   const { accessToken } = user;
 
@@ -19,10 +19,19 @@ const Characters = ({ location }) => {
     console.log(data.data);
   };
 
+  const test2 = async () => {
+    console.log(user.accessToken);
+    console.log(await checkIfTokenValid(user.accessToken));
+  };
+
   return (
     <div className='container'>
-      <button className='btn btn-primary mx-auto' onClick={test}>
-        Show
+      <button className='btn btn-primary mr-3' onClick={test}>
+        Get Characters
+      </button>
+
+      <button className='btn btn-secondary' onClick={test2}>
+        Check Token Validity
       </button>
     </div>
   );

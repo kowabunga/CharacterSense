@@ -35,7 +35,7 @@ const Login = () => {
       setUserJwt(token);
       setCookie('charsensejwt', token);
 
-      await getUser(token);
+      getUser(token);
       history.push('/auth');
     } catch (error) {
       console.log(error);
@@ -66,7 +66,6 @@ const Login = () => {
   return (
     <div className='container'>
       {jwt && <Redirect to='/characters' />}
-
       {showAlert && (
         <div className={`alert alert-danger text-center mt-3 mb-1`}>
           {alertMsg}
