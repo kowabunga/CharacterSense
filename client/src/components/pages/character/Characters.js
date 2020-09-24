@@ -12,25 +12,25 @@ const Characters = ({ location }) => {
 
   const { accessToken } = user;
 
-  const test = async () => {
+  const getChars = async () => {
     const data = await axios.get(
       `https://us.api.blizzard.com/profile/user/wow?namespace=profile-us&locale=en_US&access_token=${accessToken}`
     );
     console.log(data.data);
   };
 
-  const test2 = async () => {
+  const checkToken = async () => {
     console.log(user.accessToken);
     console.log(await checkIfTokenValid(user.accessToken));
   };
 
   return (
     <div className='container'>
-      <button className='btn btn-primary mr-3' onClick={test}>
+      <button className='btn btn-primary mr-3' onClick={getChars}>
         Get Characters
       </button>
 
-      <button className='btn btn-secondary' onClick={test2}>
+      <button className='btn btn-secondary' onClick={checkToken}>
         Check Token Validity
       </button>
     </div>

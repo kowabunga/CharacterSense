@@ -35,12 +35,15 @@ const UserState = props => {
   const getOAuthToken = async (jwt, location) => {
     try {
       if (location.search.length > 0) {
+        //Get auth code from location string
         let authCode = location.search.split('&');
         authCode = authCode[0].slice(6, authCode[0].length);
         // console.log(authCode);
 
+        //Get valid access token from blizzard
         const data = await axios.get(`/auth/oauth_token/${authCode}`);
         // console.log(data.data);
+        //Store access token in user account along side token expiration date
         const user = await axios.put(
           '/users/user/addToken',
           {
@@ -53,7 +56,6 @@ const UserState = props => {
             },
           }
         );
-
         user.data && dispatch({ type: SET_USER, payload: user.data });
       }
     } catch (error) {
@@ -61,7 +63,6 @@ const UserState = props => {
     }
   };
 
-  //@TODO run checks on token validation/login
   const checkIfTokenValid = async token => {
     const res = await axios.post(`/auth/oauth_token/check`, {
       token: token,

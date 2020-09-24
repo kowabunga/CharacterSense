@@ -15,8 +15,7 @@ const Auth = ({ location }) => {
 
   useEffect(() => {
     //When the page gets redirected by the authorize link below (in the return statement) the application state gets cleared.
-    //It has to wait for the main app to reload the jwt into state from cookies
-    //the useEffect watches for changes in the state jwt, and once all conditions are satisfied, calls a function that updates the user and stores updated user in context
+    //Wait for change in accessToken value, then run
 
     const authorize = async () => {
       //If access token is present in user data, check if token is valid or not. If valid, redirect to character page. If invalid, must reauthorize.
@@ -31,7 +30,7 @@ const Auth = ({ location }) => {
       }
     };
     authorize();
-  }, [jwt, accessToken]);
+  }, [accessToken]);
 
   return (
     <div className='jumbotron text-center'>

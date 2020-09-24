@@ -28,10 +28,16 @@ exports.updateUserOAuthToken = async (req, res) => {
   try {
     const { accessToken, expiry } = req.body;
     console.log(req.userId);
-    const user = await User.findByIdAndUpdate(req.userId, {
-      accessToken: accessToken,
-      accessTokenExpiry: expiry,
-    });
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        accessToken: accessToken,
+        accessTokenExpiry: expiry,
+      },
+      {
+        new: true, //New is true because we need the updated document with fields
+      }
+    );
 
     res.status(200).json(user);
   } catch (error) {
