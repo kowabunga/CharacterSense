@@ -1,4 +1,4 @@
-import { SET_JWT, REMOVE_JWT, SET_USER, TOKEN_VALIDITY } from '../types';
+import { SET_JWT, REMOVE_JWT, SET_USER, SET_LOGGED_IN } from '../types';
 
 export default (state, action) => {
   const { type, payload } = action;

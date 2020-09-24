@@ -2,11 +2,15 @@ import React, { useState, useContext } from 'react';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import UserContext from '../../../context/user/userContext';
+import AlertContext from '../../../context/alert/alertContext';
 import axios from 'axios';
 
 const Register = () => {
   const userContext = useContext(UserContext);
   const { setUserJwt, getUser, jwt } = userContext;
+
+  const alertContext = useContext(AlertContext);
+  const { setAlert } = alertContext;
 
   //Form state
   const [firstName, setFirstName] = useState('');
@@ -14,10 +18,6 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  //Alert state
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMsg, setAlertMsg] = useState('');
 
   //Cookies
   const [cookie, setCookie, removeCookie] = useCookies(['charsensejwt']);
@@ -49,30 +49,23 @@ const Register = () => {
       getUser(token);
       history.push('/auth');
     } catch (error) {
-      if (error.response !== undefined && error.response.data.errors[0].msg) {
-        setShowAlert(true);
-        setAlertMsg(error.response.data.errors[0].msg);
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 5000);
+      if (error.response) {
+        console.log(error.response);
+        if (error.response.data.errors !== undefined) {
+          error.response.data.errors.forEach(error => {
+            setAlert('danger', error.msg);
+          });
+        } else {
+          setAlert('danger', error.response.data.error);
+        }
       } else {
-        setShowAlert(true);
-        setAlertMsg('Something went wrong, please try again.');
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 5000);
+        setAlert('danger', 'Something went wrong, please try again');
       }
     }
   };
 
   return (
     <div className='container'>
-      {showAlert && (
-        <div className={`alert alert-danger text-center mt-3 mb-1`}>
-          {alertMsg}
-        </div>
-      )}
-
       <form onSubmit={submitForm} className=' col-sm-10 col-md-8 mx-auto mt-2'>
         <h3 className='text-center mb-3'>Register</h3>
 
@@ -120,7 +113,7 @@ const Register = () => {
             value={password}
             placeholder='Password'
             onChange={e => setPassword(e.target.value)}
-            required
+            // required
           />
         </div>
 
@@ -132,7 +125,7 @@ const Register = () => {
             value={confirmPassword}
             placeholder='Confirm Password'
             onChange={e => setConfirmPassword(e.target.value)}
-            required
+            // required
           />
         </div>
 

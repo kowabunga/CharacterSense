@@ -2,18 +2,19 @@ import React, { useState, useContext } from 'react';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import UserContext from '../../../context/user/userContext';
+import AlertContext from '../../../context/alert/alertContext';
 import axios from 'axios';
 
 const Login = () => {
   const userContext = useContext(UserContext);
   const { setUserJwt, getUser, jwt } = userContext;
+
+  const alertContext = useContext(AlertContext);
+  const { setAlert } = alertContext;
+
   //Form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  //Alert state
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMsg, setAlertMsg] = useState('');
 
   //Cookies
   const [cookie, setCookie] = useCookies(['charsensejwt']);
@@ -38,41 +39,19 @@ const Login = () => {
       getUser(token);
       history.push('/auth');
     } catch (error) {
-      console.log(error);
-      // if (error.response) {
-      //   setShowAlert(true);
-      //   setAlertMsg(
-      //     error.response.data.msg || error.response.data.errors[0].msg
-      //   );
-      //   setTimeout(() => {
-      //     setShowAlert(false);
-      //   }, 5000);
-      // } else if (error.request) {
-      //   setShowAlert(true);
-      //   setAlertMsg(error.request);
-      //   setTimeout(() => {
-      //     setShowAlert(false);
-      //   }, 5000);
-      // } else {
-      //   setShowAlert(true);
-      //   setAlertMsg('Something went wrong, please try again.');
-      //   setTimeout(() => {
-      //     setShowAlert(false);
-      //   }, 5000);
-      // }
+      if (error.response) {
+        setAlert('danger', error.response.data.error);
+      } else {
+        setAlert('danger', 'Something went wrong, please try again');
+      }
     }
   };
 
   return (
     <div className='container'>
       {jwt && <Redirect to='/characters' />}
-      {showAlert && (
-        <div className={`alert alert-danger text-center mt-3 mb-1`}>
-          {alertMsg}
-        </div>
-      )}
 
-      <form onSubmit={onLogin} className=' col-sm-10 col-md-8 mx-auto mt-2'>
+      <form onSubmit={onLogin} className='col-sm-10 col-md-8 mx-auto mt-2'>
         <h3 className='text-center mb-3'>Login</h3>
 
         <div className='form-group'>

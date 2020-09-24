@@ -9,3 +9,7 @@ export const API_ERROR = ' API_ERROR';
 export const SET_JWT = 'SET_JWT';
 export const REMOVE_JWT = 'REMOVE_JWT';
 export const SET_USER = 'SET_USER';
+
+/* ---- Alert Types ----*/
+export const SET_ERROR = 'SET_ERROR';
+export const REMOVE_ERROR = 'REMOVE_ERROR';

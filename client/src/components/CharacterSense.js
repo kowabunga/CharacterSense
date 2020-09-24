@@ -2,8 +2,10 @@ import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import UserContext from '../context/user/userContext';
+import AlertContext from '../context/alert/alertContext';
 import PrivateRoute from './PrivateRoute';
 import Header from './layout/Header';
+import Alert from './layout/Alert';
 import HomePage from './pages/HomePage';
 import Characters from './pages/character/Characters';
 import Auth from './pages/user/Auth';
@@ -19,6 +21,9 @@ const CharacterSense = () => {
 
   const [cookie] = useCookies(['charsensejwt']);
 
+  const alertContext = useContext(AlertContext);
+  const { showAlert } = alertContext;
+
   useEffect(() => {
     !jwt &&
       cookie.charsensejwt !== undefined &&
@@ -29,6 +34,7 @@ const CharacterSense = () => {
   return (
     <Router>
       <Header />
+      {showAlert && <Alert />}
       <Switch>
         <Route exact path='/' component={HomePage} />
         <Route exact path='/login' component={Login} />

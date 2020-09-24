@@ -39,13 +39,13 @@ const WoWState = props => {
       // console.log(res.data);
     } catch (error) {
       console.error(error);
+      if (error) return;
     }
   };
 
   const {
     apiError,
     clientTokenInfo,
-    oauthTokenInfo,
     wowTokenPrice,
     expansionDungeons,
     expansionRaids,

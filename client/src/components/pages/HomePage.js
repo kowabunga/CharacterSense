@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, Fragment } from 'react';
 import WowContext from '../../context/wow/wowContext';
+import axios from 'axios';
 
 const HomePage = () => {
   const wowContext = useContext(WowContext);
@@ -20,7 +21,7 @@ const HomePage = () => {
 
   //Second useEffect waits for clientTokenInfo state (acquired from first useEffect). When state changtes, makes various api calls
   useEffect(() => {
-    if (clientTokenInfo.access_token !== undefined) {
+    if (clientTokenInfo.access_token) {
       getWowTokenPrice();
     }
   }, [clientTokenInfo]);
@@ -29,6 +30,17 @@ const HomePage = () => {
     style: 'currency',
     currency: 'USD',
   });
+
+  const keystoneTests = async () => {
+    try {
+      const data = await axios.get(
+        'https://us.api.blizzard.com/data/wow/mythic-keystone/index?namespace=dynamic-us&locale=en_US&access_token=US95KLO0my53OaOwjy4IzMbQ3Z24nwQCgQ'
+      );
+      console.log(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Fragment>
@@ -52,6 +64,9 @@ const HomePage = () => {
               </div>
             )}
           </div>
+          <button className='btn btn-primary mt-1' onClick={keystoneTests}>
+            Test
+          </button>
         </div>
       </div>
     </Fragment>

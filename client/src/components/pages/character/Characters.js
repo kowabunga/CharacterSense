@@ -8,9 +8,19 @@ const Characters = ({ location }) => {
   const {} = wowContext;
 
   const userContext = useContext(UserContext);
-  const { user, checkIfTokenValid } = userContext;
+  const { jwt, user, checkIfTokenValid, getUser } = userContext;
 
   const { accessToken } = user;
+
+  useEffect(() => {
+    const getUserInfo = async jwt => {
+      if (jwt && Object.keys(user).length === 0) {
+        await getUser();
+      }
+    };
+
+    getUserInfo(jwt);
+  }, []);
 
   const getChars = async () => {
     const data = await axios.get(
